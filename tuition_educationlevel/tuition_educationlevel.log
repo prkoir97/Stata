@@ -1,0 +1,143 @@
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+      name:  PK
+       log:  /Users/priyakoirala/Desktop/school/econometrics/projects/project3/koirala_project3.log
+  log type:  text
+ opened on:  18 May 2023, 20:24:35
+
+. 
+. /*==============================================================================
+> The purpose of this exercise is to show how college tuition is related to
+> adult men's highest education level. The hypothesis is that men pursue more 
+> education when tuition costs are lower.
+> 
+> Open the HTV.dta data set. It includes data on a random sample of men in 1991.
+> ==============================================================================*/
+. 
+. use "/Users/priyakoirala/Desktop/school/econometrics/projects/project3/HTV.dta"
+
+. 
+. /*==============================================================================
+> (Q1): Use Stata's "sum, detail" command to show more detailed summary statistics 
+> for the tuit18 variable. Tuit18 is the average annual tuition (measured in $1000s)
+> at nearby colleges when the men are 18 years old.
+> 
+> What is the 75th percentile of college tuition in the sample? What does it mean?
+> ==============================================================================*/
+. 
+. sum tuit18, detail
+
+                   college tuition, age 18
+-------------------------------------------------------------
+      Percentiles      Smallest
+ 1%            0              0
+ 5%     .4102407              0
+10%     2.444079              0       Obs               1,193
+25%     6.057975              0       Sum of wgt.       1,193
+
+50%     8.826549                      Mean           8.557239
+                        Largest       Std. dev.      4.042644
+75%     11.15503       18.17392
+90%     14.16312       18.17392       Variance       16.34297
+95%     15.00826       18.17392       Skewness      -.2158796
+99%     18.17392       18.17392       Kurtosis       2.711644
+
+. 
+. /* The 75th percentile of college tuition in the sample is $11,155.03. It means that 75% of the men who were sampled have college tuition expenses 
+> that are either equal or lower than this value. */
+. 
+. /*==============================================================================
+> (Q2): Estimate a multivariable regression relating men's level of education 
+> (Y=educ) to nearby college tuition at age 18 (X1=tuit18), their mother's 
+> education (X2=motheduc), their father's education (X3=fatheduc), a binary 
+> variable that equals 1 if they lived in the Northeastern US at age 18 (X4=ne18), 
+> a binary variable that equals 1 if they lived in the North-central US at age 18 
+> (X5=nc18), and a binary variable that equals 1 if they lived in the Southern US 
+> at age 18 (X6=south18). Note that all men lived either in the Northeast US, the 
+> North-central US, the Western US, or the Southern US.
+> 
+> Use heteroskedasticity-robust standard errors. 
+> 
+> Interpret beta1hat in a sentence.
+> ==============================================================================*/
+. 
+. reg educ tuit18 motheduc fatheduc ne18 nc18 south18, robust
+
+Linear regression                               Number of obs     =      1,193
+                                                F(6, 1186)        =      63.10
+                                                Prob > F          =     0.0000
+                                                R-squared         =     0.2629
+                                                Root MSE          =     2.0194
+
+------------------------------------------------------------------------------
+             |               Robust
+        educ | Coefficient  std. err.      t    P>|t|     [95% conf. interval]
+-------------+----------------------------------------------------------------
+      tuit18 |  -.0099148   .0245582    -0.40   0.686    -.0580972    .0382677
+    motheduc |   .3198548    .038944     8.21   0.000      .243448    .3962615
+    fatheduc |   .1771686   .0262213     6.76   0.000     .1257233    .2286139
+        ne18 |     .77052   .2867912     2.69   0.007     .2078453    1.333195
+        nc18 |   .5408396   .2531378     2.14   0.033     .0441917    1.037487
+     south18 |   .2062903   .2145603     0.96   0.337    -.2146698    .6272503
+       _cons |   6.577948   .4133719    15.91   0.000     5.766927     7.38897
+------------------------------------------------------------------------------
+
+. 
+. di e(r2_a)
+.25920214
+
+. 
+. sum
+
+    Variable |        Obs        Mean    Std. dev.       Min        Max
+-------------+---------------------------------------------------------
+        wage |      1,193    13.23942    9.116401   1.023529   91.30922
+        abil |      1,193    1.805191    2.169927  -5.631463   6.263742
+        educ |      1,193    13.03437    2.346208          6         20
+          ne |      1,193     .210394    .4077594          0          1
+          nc |      1,193    .3730092    .4838073          0          1
+-------------+---------------------------------------------------------
+        west |      1,193    .1684828    .3744514          0          1
+       south |      1,193     .248114    .4320995          0          1
+       exper |      1,193    10.72842    3.105527          1         19
+    motheduc |      1,193    12.17519    2.282187          0         20
+    fatheduc |      1,193    12.44258      3.2721          0         20
+-------------+---------------------------------------------------------
+    brkhme14 |      1,193    .1659681    .3722081          0          1
+        sibs |      1,193    2.955574    1.860181          0         13
+       urban |      1,193    .8147527     .388661          0          1
+        ne18 |      1,193    .2279966    .4197164          0          1
+        nc18 |      1,193    .4115675    .4923239          0          1
+-------------+---------------------------------------------------------
+     south18 |      1,193    .2145851    .4107064          0          1
+      west18 |      1,193    .1458508    .3531046          0          1
+     urban18 |      1,193    .8751048    .3307387          0          1
+      tuit17 |      1,193    8.537157    4.121537          0   18.17392
+      tuit18 |      1,193    8.557239    4.042644          0   18.17392
+-------------+---------------------------------------------------------
+       lwage |      1,193    2.408684    .5960768   .0232569   4.514252
+     expersq |      1,193    124.7351    66.80132          1        361
+       ctuit |      1,193    .0200824    .8146919  -7.623878   9.173661
+
+. 
+. /* beta1hat is -0.0099148
+> 
+> Other variables held constant, on average, it is estimated that for every $1000 increase in tution, the level of education for the men in the sampl
+> e decreases by approximately 0.01 percentage points. */
+. 
+. /*==============================================================================
+> (Q3): Are the errors likely to be normally distributed in the model in (Q2)?
+> Why would it matter?
+> ==============================================================================*/
+. 
+. histogram educ 
+(bin=30, start=6, width=.46666667)
+
+. 
+. graph export "/Users/priyakoirala/Desktop/school/econometrics/projects/project3/Graph1_project3.pdf"
+file /Users/priyakoirala/Desktop/school/econometrics/projects/project3/Graph1_project3.pdf already exists
+r(602);
+
+end of do-file
+
+r(602);
+
