@@ -1,5 +1,5 @@
-# Stata Projects Overview
-This document provides descriptions of four Stata projects, each focusing on different aspects of statistical analysis and data exploration.
+# Stata Projects
+These projects were completed as part of an econometrics course, offering students practical experience in applying statistical techniques to real-world datasets to address economic questions. Each project involved essential components such as data cleaning, exploratory analysis, hypothesis testing, and regression modeling, which are fundamental skills for econometric analysis.
 
 ## Exploring the Impact of Maternal Smoking on Infant Birthweight
 
